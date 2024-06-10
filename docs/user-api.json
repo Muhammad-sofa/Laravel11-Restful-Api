@@ -1,0 +1,305 @@
+{
+    "openapi":"3.0.2",
+    "info": {
+      "title":"User API",
+      "version":"1.0"
+    },
+    "servers": [
+      {"url":"http://localhost:8000"}
+    ],
+    "paths": {
+          "/api/users": {
+               "post" : {
+                    "description": "Register New User",
+                    "requestBody" : {
+                         "content": {
+                              "application/json": {
+                                   "example" : {
+                                        "Sofa" : {
+                                             "description" : "Register user Sofa",
+                                             "value" : {
+                                                  "username" : "Sofa",
+                                                  "password" : "rahasia",
+                                                  "name" : "Sofa Yuliansyah"
+                                             }
+                                        }
+                                   },
+                                   "schema" : {
+                                        "type": "object",
+                                        "required": [
+                                             "username", "password", "name"
+                                        ],
+                                        "properties": {
+                                             "username" : {
+                                                  "type": "string"
+                                             },
+                                             "password" : {
+                                                  "type": "string"
+                                             },
+                                             "name" : {
+                                                  "type": "string"
+                                             }
+                                        }
+                                   }
+                              }
+                         }
+                    },
+                    "responses": {
+                         "400" : {
+                              "description": "Validation error",
+                              "content": {
+                                   "application/json" : {
+                                        "example": {
+                                             "Validationerror" : {
+                                                  "description" : "Validation Error",
+                                                  "value" : {
+                                                       "errors" : {
+                                                            "username" : [
+                                                                 "Username must not be blank",
+                                                                 "Username min 6 characters"
+                                                            ],
+                                                            "name" : [
+                                                                 "Name must not be blank",
+                                                                 "Name min 6 characters"
+                                                            ]
+                                                       }
+                                                  }
+                                             }
+                                        }
+                                   }
+                              }
+                         },
+                         "201" : {
+                              "description": "Success register user",
+                              "content": {
+                                   "application/json" : {
+                                        "examples" : {
+                                             "success" : {
+                                                  "description": "Success register user",
+                                                  "value": {
+                                                       "data" : {
+                                                            "id" : 1,
+                                                            "name" : "Sofa Yuliansyah",
+                                                            "username" : "Sofa"
+                                                       }
+                                                  }
+                                             }
+                                        },
+                                        "schema" : {
+                                             "type": "object",
+                                             "properties": {
+                                                  "data" : {
+                                                       "type": "object",
+                                                       "properties": {
+                                                            "id" : {
+                                                                 "type": "number"
+                                                            },
+                                                            "username" : {
+                                                                 "type": "string"
+                                                            },
+                                                            "name" : {
+                                                                 "type": "string"
+                                                            }
+                                                       }
+                                                  },
+                                                  "error" : {
+                                                       "type": "object"
+                                                  }
+                                             }
+                                        }
+                                   }
+                              }
+                         }
+                    }
+               }
+          },
+          "/api/users/login" : {
+               "post": {
+                    "description": "Login User",
+                    "requestBody" : {
+                         "content": {
+                              "application/json": {
+                                   "schema" : {
+                                        "type": "object",
+                                        "properties": {
+                                             "username" : {
+                                                  "type": "string"
+                                             },
+                                             "password" : {
+                                                  "type": "string"
+                                             }
+                                        }
+                                   }
+                              }
+                         }
+                    },
+                    "responses": {
+                         "200" : {
+                              "description": "Success login user",
+                              "content": {
+                                   "application/json" : {
+                                        "schema": {
+                                             "type": "object",
+                                             "properties": {
+                                                  "data" : {
+                                                       "type": "object",
+                                                       "properties": {
+                                                            "id" : {
+                                                                 "type": "number"
+                                                            },
+                                                            "username" : {
+                                                                 "type": "string"
+                                                            },
+                                                            "name" : {
+                                                                 "type": "string"
+                                                            },
+                                                            "token" : {
+                                                                 "type": "string"
+                                                            }
+                                                       }
+                                                  },
+                                                  "errors" : {
+                                                       "type": "object"
+                                                  }
+                                             }
+                                        }
+                                   }
+                              }
+                         }
+                    }
+               }
+          },
+          "/api/users/current" : {
+               "get" : {
+                    "description": "Get current user",
+                    "parameters": [
+                         {
+                              "name": "Authorization",
+                              "in": "header"
+                         }
+                    ],
+                    "responses": {
+                         "200" : {
+                              "description": "Success get current user",
+                              "content": {
+                                   "application/json" : {
+                                        "schema" : {
+                                             "type": "object",
+                                             "properties": {
+                                                  "data" : {
+                                                       "type": "object",
+                                                       "properties": {
+                                                            "id" : {
+                                                                 "type": "number"
+                                                            },
+                                                            "username" : {
+                                                                 "type": "string"
+                                                            },
+                                                            "name" : {
+                                                                 "type": "string"
+                                                            }
+                                                       }
+                                                  },
+                                                  "errors" : {
+                                                       "type": "object"
+                                                  }
+                                             }
+                                        }
+                                   }
+                              }
+                         }
+                    }
+               },
+               "patch" : {
+                    "description": "Update current user",
+                    "parameters": [
+                         {
+                              "name": "Authorization",
+                              "in": "header"
+                         }
+                    ],
+                    "requestBody" : {
+                         "description": "Update current user",
+                         "content": {
+                              "application/json": {
+                                   "schema" : {
+                                        "type": "object",
+                                        "properties": {
+                                             "name" : {
+                                                  "type": "string"
+                                             },
+                                             "password" : {
+                                                  "type": "string"
+                                             }
+                                        }
+                                   }
+                              }
+                         }
+                    },
+                    "responses": {
+                         "200" : {
+                              "description": "Success update user",
+                              "content": {
+                                   "application/json" : {
+                                        "schema" : {
+                                             "type": "object",
+                                             "properties": {
+                                                  "data" : {
+                                                       "type": "object",
+                                                       "properties": {
+                                                            "id" : {
+                                                                 "type": "number"
+                                                            },
+                                                            "username" : {
+                                                                 "type": "string"
+                                                            },
+                                                            "name" : {
+                                                                 "type": "string"
+                                                            }
+                                                       }
+                                                  },
+                                                  "errors" : {
+                                                       "type": "object"
+                                                  }
+                                             }
+                                        }
+                                   }
+                              }
+                         }
+                    }
+               }
+          },
+          "/api/users/logout" : {
+               "delete" : {
+                    "description": "Logout Current User",
+                    "parameters": [
+                         {
+                              "name": "Authorization",
+                              "in": "header"
+                         }
+                    ],
+                    "responses": {
+                         "200" : {
+                              "description": "Success logout user",
+                              "content": {
+                                   "application/json" : {
+                                        "schema" : {
+                                             "type": "object",
+                                             "properties": {
+                                                  "data" : {
+                                                       "type": "boolean"
+                                                  },
+                                                  "errors" : {
+                                                       "type": "object"
+                                                  }
+                                             }
+                                        }
+                                   }
+                              }
+                         }
+                    }
+               }
+          }
+    }
+  }
+  
