@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ContactResource;
 use App\Http\Requests\ContactCreateRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ContactController extends Controller
 {
@@ -21,5 +22,21 @@ class ContactController extends Controller
         $contact->save();
 
         return (new ContactResource($contact))->response()->setStatisCode(201);
+    }
+
+    public function get(int $id): ContactResource {
+        $user = Auth::user();
+
+        $contact = Contact::where('id', $id)->where('user_id', $user->id)->first();
+        if(!$contact){
+            throw new HttpResponseException(response()->json([
+                'errors' => [
+                    "message" => [
+                        "not found"
+                    ]
+                ]
+            ])->setStatusCode(404));
+        }
+        return  new ContactResource($contact);
     }
 }
